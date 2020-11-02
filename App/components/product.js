@@ -60,7 +60,7 @@ export default function Product({ navigation }) {
   React.useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "create table if not exists items (id integer primary key not null, done int, value text);"
+        "create table if not exists items (id integer primary key not null, done int, value text, cost int);"
       );
     });
   }, []);
@@ -73,7 +73,10 @@ export default function Product({ navigation }) {
 
     db.transaction(
       (tx) => {
-        tx.executeSql("insert into items (done, value) values (0, ?)", [text]);
+        tx.executeSql(
+          "insert into items (done, value, cost) values (0, ?, ?)",
+          [text]
+        );
         tx.executeSql("select * from  items", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
         );
